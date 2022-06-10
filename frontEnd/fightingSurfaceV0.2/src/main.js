@@ -71,11 +71,12 @@ attackBtn.addEventListener("click", function () {
 
   if (actualTurn === true && hero.isDead() === false && canAttack === true) {
     canAttack = false;
+
     if (actualEnemy === null || actualEnemy === undefined) {
     } else {
       hero.attack(actualEnemy);
       //Changin color of btn
-      removeOrAddAttack("azd");
+      removeOrAddAttack();
       changeArrowDirection()
       howMuchAttack++;
       special = checkSpecial(howMuchAttack);
@@ -93,14 +94,7 @@ attackBtn.addEventListener("click", function () {
 
       }
       canAttack = true;
-      if (checkSpecial(howMuchAttack)) {
-        removeOrAddAttack("add", true);
-        console.log("le spécial est pret");
-      } else {
-        removeOrAddAttack("add");
-        console.log("le spécial n'est pas pret");
-        
-      }
+      changeColorSpecial();
       changeArrowDirection("allies");
 
     }, 2000);
@@ -196,6 +190,7 @@ function removeOrAddAttack(action = "", special = false) {
  * @param { STRING }
  * @return { VOID }
  */
+
 function changeArrowDirection(direction = "") {
   if (direction === "allies") {
     console.log("Dans change Arrow Direction: Tour du héro");
@@ -204,31 +199,35 @@ function changeArrowDirection(direction = "") {
     arrowSelector.classList.add("quick-allies-turn");
   } else {
     console.log("Dans change Arrow Direction: Tour de l'ennemie");
-    arrowSelector.classList.add("quick-enemy-turn");
-    arrowSelector.classList.remove("enemy-turn");
+    arrowSelector.classList.add("enemy-turn");
     arrowSelector.classList.remove("quick-allies-turn");
+    arrowSelector.classList.remove("quick-enemy-turn");
   }
 }
-
 /**
  * TODO: fonction qui change la fleche de direction démarrage du jeux ou d'un round
  * *    Selon un nombre aléatoire définis qui commence
  * *
  */
 function newRound() {
-  changeColorSpecial();
-  if (randomNumber() < 50) {
+  
+  let rand = randomNumber();
+  rand = 51
+  if (rand <= 50) {
     changeMessageStatus("c'est vous qui commencer");
     changeArrowDirection("allies");
     //Changin color of btn
+    changeColorSpecial();
+
   } else {
     changeMessageStatus("c'est l'ennemis qui commence");
     changeArrowDirection();
     setTimeout(function () {
       actualEnemy.attack(hero);
-      changeArrowDirection("allies");
+      changeColorSpecial() ;
+    }, 5000);
+    changeArrowDirection("allies");
 
-    }, 2000);
   }
 }
 
@@ -252,10 +251,8 @@ function checkSpecial(attackCount) {
 function changeColorSpecial() {
   if (checkSpecial(howMuchAttack)) {
     removeOrAddAttack("add", true);
-    console.log("le spécial est pret");
   } else {
     removeOrAddAttack("add");
-    console.log("le spécial n'est pas pret");
 
   }
 }

@@ -126,7 +126,7 @@ class Enemy extends Entity {
      */
     isDead() {
         if (this.life <= 0) {
-            changeMessageStatus(`${this.name} est mort, du renfort arrive !`)
+            changeMessageStatus(`${this.name} est mort, du renfort arrive !`);
             this.life = 0;
             return true;
         }
