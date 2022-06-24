@@ -23,11 +23,11 @@ class ApiController
         if ($_SERVER['REQUEST_METHOD'] === "GET") {
 
             $monsters = $this->apiManager->getMonstersDB();
-            $tab['monsters'] = [];
+            $tab = [];
 
             foreach ($monsters as $value) {
-                if (!array_key_exists($value->getId(), $tab['monsters'])) {
-                    $tab["monsters"][$value->getId()] = [
+                if (!array_key_exists($value->getId(), $tab)) {
+                    $tab[$value->getId()] = [
                         "id" => $value->getId(),
                         "name" => $value->getName(),
                         "life" => $value->getLife(),

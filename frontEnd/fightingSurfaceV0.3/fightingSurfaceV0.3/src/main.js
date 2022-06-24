@@ -9,9 +9,10 @@ import {
   changeArrowDirection,
   removeOrAddAttack
 } from "./generate.js";
-import { enemiesList } from "./data.js";
+//Données static
+import { enemiesList } from "./staticData/data.js";
 async function getData(){
-  const response = await fetch("data.json",{
+  const response = await fetch("http://localhost/fightingSurfaceBack/monsters",{
     method: 'GET',
     mode: 'cors'
   });
@@ -22,8 +23,8 @@ async function getData(){
     Promise.reject("Erreur");
   }
 }
-getData().then(function(monster){
-  console.log(monster);
+getData().then(function(monsters){
+  console.log(monsters);
 });
 //SELECTEUR
 //Menu
