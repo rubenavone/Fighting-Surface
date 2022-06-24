@@ -5,65 +5,59 @@ import {
   changeMessageStatus,
   isItNullOrUndefined,
   addMonsterInDeadZone,
-  switcherDisplay
+  switcherDisplay,
+  changeArrowDirection,
+  removeOrAddAttack
 } from "./generate.js";
 import { enemiesList } from "./data.js";
-
-let roundLaunched = false; //Utiliser pour s'avoir si la fleche doit etre lancer
+async function getData(){
+  const response = await fetch("data.json",{
+    method: 'GET',
+    mode: 'cors'
+  });
+  if(response.ok){
+    
+    return Promise.resolve(response.json());
+  }else{
+    Promise.reject("Erreur");
+  }
+}
+getData().then(function(monster){
+  console.log(monster);
+});
+//SELECTEUR
 //Menu
-let menuPlaySelector = document.querySelector(".menu-play-js");
-let menuHighscoreSelector = document.querySelector(".menu-highscore-js");
-let menuCreditSelector = document.querySelector(".menu-credit-js");
-let menuReturn = document.querySelectorAll(".menu-return-js");
+const menuPlaySelector = document.querySelector(".menu-play-js");
+const menuHighscoreSelector = document.querySelector(".menu-highscore-js");
+const menuCreditSelector = document.querySelector(".menu-credit-js");
+const menuReturn = document.querySelectorAll(".menu-return-js");
+//Bouton de generation d'ennemis et gestion apararition DOM enemy
+const generateButton = document.querySelector(".enemies-generator");
+const enemyDisableSelector = document.querySelector(".enemy");
+const lifeBarEnemySelector = document.querySelector(".life-bar");
+//Gestion des tours et de l'attaque
+const newEnemy = document.querySelector(".enemies-generator");
+const arrowSelector = document.querySelector(".turn-arrow > img");
+const attackBtnSelector = document.querySelector(".attack-js");
+const specialBtnSelector = document.querySelector(".special-js");
+
 //Gere le tour true = joueur, false = enemy
 let actualTurn = true;
 //Permet de gerer l'appuie sur le bouton attack
 let canAttack = true;
-//Bouton de generation d'ennemis et gestion apararition DOM enemy
-let generateButton = document.querySelector(".enemies-generator");
-let enemyDisableSelector = document.querySelector(".enemy");
-let lifeBarEnemySelector = document.querySelector(".life-bar");
 //Gestion special
-let howMuchAttack = 0;
-let special = false;
+let howMuchAttack = 3;
 //Les entités
 let hero = null;
 let actualEnemy;
-/***************/
-let whoBegin;
-/**
- * SELECTEUR DE BASES
- */
-let newEnemy = document.querySelector(".enemies-generator");
-let arrowSelector = document.querySelector(".turn-arrow > img");
-let attackBtn = document.querySelector(".attack-js");
-let specialBtn = document.querySelector(".special-js");
-
-
-
+//Score
+let score = 0;
 /**
  * ! SUITE
- * TODO: Crée un menu en HTML/CSS contenant Jouer - Scores - Crédit et faite les TODO
+ * TODO: Crée un menu en HTML/CSS contenant Jouer - Scores - Crédit 
  */
 
-/**
- * ! SUITE
- * TODO: Evenement pour gerer le bouton play du menu
- * * 1 - Fait disparaitre le menu et apparaitre le jeux
- */
-
-/**
- * ! SUITE
- * TODO: Evenement pour gerer le bouton highscore du menu
- * * 1 - Fait disparaitre le menu et apparaitre le tableau
- */
-
-/**
- * ! SUITE
- * TODO: Evenement pour gerer le bouton crédit du menu
- * * 1 - Fait disparaitre le menu et apparaitre le crédit
- */
-
+ 
 /**
  * TODO: Evenement pour gerer le bouton play du menu
  * * 1 - Fait disparaitre le menu et apparaitre le jeux
@@ -71,7 +65,6 @@ let specialBtn = document.querySelector(".special-js");
 menuPlaySelector.addEventListener("click", function () {
   animArcade("in");
 
-  whoBegin = randomNumber();
   //Lancement du jeux
   beginTheGame();
   generateButton.classList.toggle("disable");
@@ -105,53 +98,25 @@ menuReturn.forEach((button) => {
     switcherDisplay(0);
   });
 });
-/**
- * TODO: Evenement qui lance un combat
- * * 1 - Generer un adversaire - change le message barre status
- * * 2 - Changer le status en round lancer
- * * 3 - Tirer aléatoirement le tour (joueur ou adv)
- */
 
 /**
- * 
  *  TODO: Ce code à un soucis - fait en sorte d'attaquer dans le if (verification null undefined)
  *  TODO: Evenement qui gère l'attaque
  */
-attackBtn.addEventListener("click", function () {
-
+attackBtnSelector.addEventListener("click", function () {
   if (actualTurn === true && hero.isDead() === false && canAttack === true) {
     canAttack = false;
-
-    changeColorSpecial();
     if (actualEnemy === null || actualEnemy === undefined) {
     } else {
       hero.attack(actualEnemy);
       //Changin color of btn
-      removeOrAddAttack();
-      changeArrowDirection()
+      removeOrAddAttack(attackBtnSelector, specialBtnSelector, 0);
+      changeArrowDirection(arrowSelector)
       howMuchAttack++;
-      special = checkSpecial(howMuchAttack);
     }
-
-    setTimeout(function () {
-      actualEnemy.attack(hero);
-      if (actualEnemy.isDead() === false && hero.isDead() === false) {
-        changeArrowDirection("allies");
-        changeColorSpecial();
-      } else if (actualEnemy.isDead() === true) {
-        hero.healByVictory();
-        addMonsterInDeadZone(actualEnemy);
-        actualEnemy = generateEnemy(enemiesList);
-        newRound();
-
-      }
-      canAttack = true;
-
-    }, 2000);
-
+    enemyAttack();
   } else {
-    console.log("vous ne pouvez pas attaquer")
-    animArcade();
+    console.log("vous ne pouvez pas attaquer");
   }
 });
 
@@ -159,32 +124,17 @@ attackBtn.addEventListener("click", function () {
  * TODO: Evenement qui gère le spécial
  *
  */
-specialBtn.addEventListener("click", function () {
-  if (special === true) {
+specialBtnSelector.addEventListener("click", function () {
+  if (howMuchAttack >= 3) {
     if (actualTurn === true && hero.isDead() === false && canAttack === true) {
       canAttack = false;
       hero.specialAttack(actualEnemy);
       howMuchAttack = 0;
-      changeArrowDirection();
-      special = false;
+      removeOrAddAttack(attackBtnSelector, specialBtnSelector, 0);
+      changeArrowDirection(arrowSelector);
     }
 
-    setTimeout(function () {
-
-      if (actualEnemy.isDead() === false && hero.isDead() === false) {
-        actualEnemy.attack(hero);
-        changeArrowDirection("allies");
-
-      } else if (actualEnemy.isDead() === true) {
-        hero.healByVictory();
-        addMonsterInDeadZone(actualEnemy);
-        actualEnemy = generateEnemy(enemiesList);
-        newRound();
-      } else {
-
-      }
-      canAttack = true;
-    }, 2000);
+    enemyAttack();
 
   } else {
     changeMessageStatus("Le spécial n'est pas encore prêt !")
@@ -197,8 +147,6 @@ newEnemy.addEventListener("click", function () {
     //1
     actualEnemy = generateEnemy(enemiesList);
     //2
-    roundLaunched = true;
-    //3
     newRound();
   } catch (error) {
     console.error(`Une erreur est survenue ${error}`);
@@ -218,114 +166,54 @@ function beginTheGame() {
   }
   if (actualEnemy !== undefined) {
     generateButton.classList.toggle("disable");
-
-  }
-}
-/**
- * TODO: Permet de mettre ou retirer la possibilité d'attaquer
- * @param {String} action
- */
-function removeOrAddAttack(action = "", special = false) {
-  if (action === "add") {
-    console.log("add attack");
-    attackBtn.classList.add("is-error");
-    attackBtn.classList.remove("is-disabled");
-  } else {
-    console.log("remove attack");
-    attackBtn.classList.remove("is-error");
-    attackBtn.classList.add("is-disabled");
-  }
-  if (special === true) {
-    console.log("add special");
-    specialBtn.classList.add("is-primary");
-    specialBtn.classList.remove("is-disabled");
-  } else {
-    console.log("remove special");
-    specialBtn.classList.remove("is-primary");
-    specialBtn.classList.add("is-disabled");
   }
 }
 
 /**
- * TODO: fonction qui change la fleche de direction
- * *   Prend une direction en argument
- * *   La fleche tourne lentement vers l'ennemis
- * @param { STRING }
- * @return { VOID }
+ * TODO: Fonction qui gère l'attaque d'un enemy
  */
-
-function changeArrowDirection(direction = "") {
-  if (direction === "allies") {
-    console.log("Dans change Arrow Direction: Tour du héro");
-    if (arrowSelector.classList.contains("quick-allies-turn")) {
-      arrowSelector.classList.add("allies-turn");
-      arrowSelector.classList.remove("quick-allies-turn");
-
-    } else {
-      arrowSelector.classList.add("allies-turn");
-
-      arrowSelector.classList.remove("quick-allies-turn");
+ function enemyAttack() {
+  setTimeout(function () {
+    if (actualEnemy.isDead() === false && hero.isDead() === false) {
+      actualEnemy.attack(hero);
+      changeArrowDirection(arrowSelector, "allies");
+      removeOrAddAttack(attackBtnSelector, specialBtnSelector, howMuchAttack, "add");
+    } else if (actualEnemy.isDead() === true) {
+      removeOrAddAttack(attackBtnSelector, specialBtnSelector, 0);
+      score += actualEnemy.score;
+      hero.healByVictory();
+      newRound();
     }
-    arrowSelector.classList.remove("quick-enemy-turn");
-    arrowSelector.classList.remove("enemy-turn");
-
-  } else {
-    console.log("Dans change Arrow Direction: Tour de l'ennemie");
-    arrowSelector.classList.add("enemy-turn");
-    arrowSelector.classList.remove("quick-allies-turn");
-    arrowSelector.classList.remove("allies-turn");
-
-    arrowSelector.classList.remove("quick-enemy-turn");
-  }
+    if(hero.isDead()){
+      console.log(score);
+      animArcade();
+    }
+    canAttack = true;
+  }, 2000);
 }
+
 /**
  * TODO: fonction qui change la fleche de direction démarrage du jeux ou d'un round
  * *    Selon un nombre aléatoire définis qui commence
  * *
  */
 function newRound() {
-
+  addMonsterInDeadZone(actualEnemy);
+  actualEnemy = generateEnemy(enemiesList);
+  removeOrAddAttack(attackBtnSelector, specialBtnSelector, 2);
   let rand = randomNumber();
   if (rand <= 50) {
     changeMessageStatus("c'est vous qui commencer");
-    changeArrowDirection("allies");
+    changeArrowDirection(arrowSelector, "allies");
     //Changin color of btn
-    changeColorSpecial();
+    removeOrAddAttack(attackBtnSelector, specialBtnSelector, howMuchAttack, "add");
+
 
   } else {
     changeMessageStatus("c'est l'ennemis qui commence");
-    changeArrowDirection();
-    setTimeout(function () {
-      actualEnemy.attack(hero);
-      changeArrowDirection("allies");
-      changeColorSpecial();
-    }, 3000);
+    changeArrowDirection(arrowSelector);
+    enemyAttack();
 
-  }
-}
-
-/**
- * TODO: Fonction/méthode qui vérifie si le joueur à un special graçe au compteur d'attaque
- * @param { Number } 
- * @return { Boolean }
- */
-function checkSpecial(attackCount) {
-  if (attackCount >= 3) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/**
- * TODO: Fonction qui active ou non le btn special
- * @return { VOID }
- */
-function changeColorSpecial() {
-  if (checkSpecial(howMuchAttack)) {
-    removeOrAddAttack("add", true);
-  } else {
-    removeOrAddAttack("add");
   }
 }
 
@@ -354,6 +242,3 @@ function animArcade(inOrOut = "out") {
   }
 
 }
-/**
- * Mettre en place un pierre feuille sciseaux, 
- */

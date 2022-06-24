@@ -1,4 +1,4 @@
-import { changeMessageStatus, randomNumber} from "./generate.js";
+import { changeMessageStatus, randomNumber } from "./generate.js";
 
 class Entity {
     constructor(name, life, att, def, imgPath, nameSelector) {
@@ -62,12 +62,14 @@ class Entity {
         }
         this.lifeBar.setAttribute("value", this.life);
     }
+
     //Permet de changer la profile pic dans le DOM
     setPp() {
         let pp = document.querySelector(".enemy-pp");
         console.log(`set PP ${pp} ${this.imgPath}`);
         pp.src = this.imgPath;
     }
+
     statusInit() {
         this.lifeBar.setAttribute("max", this.life);
         this.changeLifeStatus();
@@ -75,15 +77,16 @@ class Entity {
         this.setPp();
     }
 
- 
+
 }
 
 class Enemy extends Entity {
-    constructor(name = "le clone", life = 80, att = 10, def = 2, imgPath = "img/barzork_clone.png", nameSelector) {
+    constructor(name = "le clone", life = 80, att = 10, def = 2, imgPath = "img/barzork_clone.png", score, nameSelector) {
         super(name, life, att, def, imgPath, nameSelector);
         this.lifeBar = document.querySelector("#enemy-bar");
         this.status = 0;
-        this.nameSelector = ".enemy-title"
+        this.nameSelector = ".enemy-title";
+        this.score = score;
     }
     setName() {
         let title = document.querySelector(this.nameSelector);
@@ -99,7 +102,7 @@ class Enemy extends Entity {
     displayEnemy() {
         //Selecteur
         let allArticles = document.querySelectorAll("article");
-      
+
         // console.log(generateButton.classList)
         // if (!generateButton.classList.contains("disable")) {
         //     generateButton.classList.toggle("disable");
@@ -133,7 +136,7 @@ class Enemy extends Entity {
             return false;
         }
     }
- 
+
 
 }
 class Allies extends Entity {
@@ -151,7 +154,7 @@ class Allies extends Entity {
     isDead() {
         if (this.life <= 0) {
             changeMessageStatus(`${this.name} est mort, la partie est terminer!`)
-    
+
             this.life = 0;
             return true;
         } else {
@@ -213,9 +216,11 @@ class Allies extends Entity {
         console.log("après soin" + this.life);
         //
         changeMessageStatus(message);
+        //Enpeche la vie de dépasser le maximum possible
         if (this.life > this.maxLife) {
             this.life = this.maxLife;
         }
+
         this.changeLifeStatus();
 
     }

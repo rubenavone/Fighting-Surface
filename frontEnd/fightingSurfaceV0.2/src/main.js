@@ -8,7 +8,6 @@ import {
 } from "./generate.js";
 import { enemiesList } from "./data.js";
 
-let roundLaunched = false; //Utiliser pour s'avoir si la fleche doit etre lancer
 
 //Gere le tour true = joueur, false = enemy
 let actualTurn = true;
@@ -141,14 +140,15 @@ specialBtn.addEventListener("click", function () {
   }
 
 });
-
+/**
+ * TODO: Evènement qui ajoute un enemy et lance une manche 
+ */
 newEnemy.addEventListener("click", function () {
   try {
     //1
     actualEnemy = generateEnemy(enemiesList);
-    //2
-    roundLaunched = true;
-    //3
+
+    //
     newRound();
   } catch (error) {
     console.error(`Une erreur est survenue ${error}`);

@@ -1,6 +1,5 @@
 /**
  * * Gestion de la generation est mises en DOM
- * 
  */
  import { Enemy } from "./class.js";
 
@@ -17,7 +16,6 @@
  */
 function randomEnemy(array){
     let rand = Math.floor(Math.random() * array.length);
-
     return array[rand];
 }
 
@@ -29,7 +27,7 @@ function randomEnemy(array){
  * * 4 - Avec un propriété Hue rotate generer des ennemis au couleur différente
  */
 
-function generateEnemy(enemiesList){
+function generateEnemyDestructOld(enemiesList){
     //1
     let name, life, att, def, url;
     ([name, life, att, def, url] = randomEnemy(enemiesList));
@@ -37,6 +35,26 @@ function generateEnemy(enemiesList){
     console.log(name, life, att, def, url);
     //2
     let newEnemy = new Enemy(name, life, att, def, url);
+    //3
+    newEnemy.displayEnemy();
+    return newEnemy;
+}
+/**
+ * TODO: Generation instanciation 
+ * * 1 - Désormais nous allons travaillez avec un json 
+ * * 2 - Récuperer un élément aléatoire à l'interieur
+ * * 3 - Appel de la fonction display en lui passant Enemy
+ * * 4 - Retournez Enemy
+ * @param {Array} enemiesList 
+ * @returns {Enemy}
+ */
+function generateEnemy(enemiesList){
+    //1
+    let randEnemy = randomEnemy(enemiesList);
+
+    console.log(randEnemy.name, randEnemy.life, randEnemy.att, randEnemy.def, randEnemy.url, randEnemy.score);
+    //2
+    let newEnemy = new Enemy(randEnemy.name, randEnemy.life, randEnemy.att, randEnemy.def, randEnemy.url, randEnemy.score);
     //3
     newEnemy.displayEnemy();
     return newEnemy;
@@ -109,4 +127,60 @@ function addMonsterInDeadZone(monster){
     };
 };
 
-export {randomNumber, generateEnemy, changeMessageStatus, switcherDisplay,isItNullOrUndefined, addMonsterInDeadZone};
+/**
+ * TODO: fonction qui change la fleche de direction
+ * *   Prend une direction en argument
+ * *   La fleche tourne lentement vers l'ennemis
+ * @param { STRING }
+ * @return { VOID }
+ */
+ function changeArrowDirection(arrow,direction = "") {
+    if (direction === "allies") {
+      console.log("Dans change Arrow Direction: Tour du héro");
+      if(arrow.classList.contains("quick-allies-turn")){
+      arrow.classList.add("allies-turn");
+      arrow.classList.remove("quick-allies-turn");
+  
+      }else{
+        arrow.classList.add("allies-turn");
+  
+        arrow.classList.remove("quick-allies-turn");
+      }
+      arrow.classList.remove("quick-enemy-turn");
+      arrow.classList.remove("enemy-turn");
+  
+    } else {
+      console.log("Dans change Arrow Direction: Tour de l'ennemie");
+      arrow.classList.add("enemy-turn");
+      arrow.classList.remove("quick-allies-turn");
+      arrow.classList.remove("allies-turn");
+  
+      arrow.classList.remove("quick-enemy-turn");
+    }
+  }
+
+  /**
+ * TODO: Permet de mettre ou retirer la possibilité d'attaquer
+ * @param {String} action
+ */
+function removeOrAddAttack(attackBtn, specialBtn, count, action = "") {
+    if (action === "add") {
+      console.log("add attack");
+      attackBtn.classList.add("is-error");
+      attackBtn.classList.remove("is-disabled");
+    } else {
+      console.log("remove attack");
+      attackBtn.classList.remove("is-error");
+      attackBtn.classList.add("is-disabled");
+    }
+    if (count >= 3) {
+      console.log("add special");
+      specialBtn.classList.add("is-primary");
+      specialBtn.classList.remove("is-disabled");
+    } else {
+      console.log("remove special");
+      specialBtn.classList.remove("is-primary");
+      specialBtn.classList.add("is-disabled");
+    }
+  }
+export {randomNumber, generateEnemy, changeMessageStatus, switcherDisplay,isItNullOrUndefined, addMonsterInDeadZone,changeArrowDirection,removeOrAddAttack};
