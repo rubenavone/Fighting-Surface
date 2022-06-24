@@ -34,6 +34,8 @@ async function getData(){
     Promise.reject("Erreur");
   }
 }
+
+
 /**
  * TODO: Generation instanciation 
  * * 1 - Désormais nous allons travaillez avec un json 

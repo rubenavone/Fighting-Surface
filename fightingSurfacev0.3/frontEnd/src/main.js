@@ -7,13 +7,13 @@ import {
   addMonsterInDeadZone,
   switcherDisplay,
   changeArrowDirection,
-  removeOrAddAttack
+  removeOrAddAttack,
+  getData
 } from "./generate.js";
 //Données static
 import { enemiesList } from "./staticData/data.js";
 
 //Données dynamic
-
 
 //SELECTEUR
 //Menu
@@ -47,7 +47,7 @@ let score = 0;
  * TODO: Crée un menu en HTML/CSS contenant Jouer - Scores - Crédit 
  */
 
- 
+
 /**
  * TODO: Evenement pour gerer le bouton play du menu
  * * 1 - Fait disparaitre le menu et apparaitre le jeux
@@ -131,20 +131,18 @@ specialBtnSelector.addEventListener("click", function () {
   }
 
 });
+async function bla(){
+  let data = await getData();
+  console.log(data)
+}
 
 newEnemy.addEventListener("click", function () {
-  try {
+ 
     //1
-    getData().then(function(monsters){
-      console.log(monsters);
-      actualEnemy = generateEnemy(monsters);
-    });
+bla()
     //2
     newRound();
-  } catch (error) {
-    console.error(`Une erreur est survenue ${error}`);
-    console.log(error);
-  }
+  
   //Retrait du bouton
   generateButton.classList.toggle("disable");
 
@@ -165,7 +163,7 @@ function beginTheGame() {
 /**
  * TODO: Fonction qui gère l'attaque d'un enemy
  */
- function enemyAttack() {
+function enemyAttack() {
   setTimeout(function () {
     if (actualEnemy.isDead() === false && hero.isDead() === false) {
       actualEnemy.attack(hero);
@@ -177,7 +175,7 @@ function beginTheGame() {
       hero.healByVictory();
       newRound();
     }
-    if(hero.isDead()){
+    if (hero.isDead()) {
       console.log(score);
       animArcade();
     }
