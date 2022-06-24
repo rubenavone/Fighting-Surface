@@ -11,6 +11,8 @@ import {
 } from "./generate.js";
 //Données static
 import { enemiesList } from "./staticData/data.js";
+
+//Données dynamic
 async function getData(){
   const response = await fetch("http://localhost/fightingSurfaceBack/monsters",{
     method: 'GET',
@@ -23,9 +25,7 @@ async function getData(){
     Promise.reject("Erreur");
   }
 }
-getData().then(function(monsters){
-  console.log(monsters);
-});
+
 //SELECTEUR
 //Menu
 const menuPlaySelector = document.querySelector(".menu-play-js");
@@ -146,7 +146,10 @@ specialBtnSelector.addEventListener("click", function () {
 newEnemy.addEventListener("click", function () {
   try {
     //1
-    actualEnemy = generateEnemy(enemiesList);
+    getData().then(function(monsters){
+      console.log(monsters);
+      actualEnemy = generateEnemy(monsters);
+    });
     //2
     newRound();
   } catch (error) {
