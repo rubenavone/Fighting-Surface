@@ -13,18 +13,7 @@ import {
 import { enemiesList } from "./staticData/data.js";
 
 //Données dynamic
-async function getData(){
-  const response = await fetch("http://localhost/fightingSurfaceBack/monsters",{
-    method: 'GET',
-    mode: 'cors'
-  });
-  if(response.ok){
-    
-    return Promise.resolve(response.json());
-  }else{
-    Promise.reject("Erreur");
-  }
-}
+
 
 //SELECTEUR
 //Menu

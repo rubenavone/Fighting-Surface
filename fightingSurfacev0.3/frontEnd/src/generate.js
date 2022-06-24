@@ -18,26 +18,21 @@ function randomEnemy(array){
     let rand = Math.floor(Math.random() * array.length);
     return array[rand];
 }
-
 /**
- * TODO: Generation instanciation
- * * 1 - destructuring sur un élément du tableau tirer au hasard
- * * 2 - Instanciation a partir de celui ci
- * * 3 - Appel de la fonction display en passant le nouvel objet
- * * 4 - Avec un propriété Hue rotate generer des ennemis au couleur différente
+ * TODO: Fetch sur le backend pour récuperer l'ensemble des monstre et ainsis faire un tirage aléatoire dessus
+ * 
  */
-
-function generateEnemyDestructOld(enemiesList){
-    //1
-    let name, life, att, def, url;
-    ([name, life, att, def, url] = randomEnemy(enemiesList));
-
-    console.log(name, life, att, def, url);
-    //2
-    let newEnemy = new Enemy(name, life, att, def, url);
-    //3
-    newEnemy.displayEnemy();
-    return newEnemy;
+async function getData(){
+  const response = await fetch("http://localhost/fightingSurfaceBack/monsters",{
+    method: 'GET',
+    mode: 'cors'
+  });
+  if(response.ok){
+    
+    return await Promise.resolve(response.json());
+  }else{
+    Promise.reject("Erreur");
+  }
 }
 /**
  * TODO: Generation instanciation 
@@ -183,4 +178,4 @@ function removeOrAddAttack(attackBtn, specialBtn, count, action = "") {
       specialBtn.classList.add("is-disabled");
     }
   }
-export {randomNumber, generateEnemy, changeMessageStatus, switcherDisplay,isItNullOrUndefined, addMonsterInDeadZone,changeArrowDirection,removeOrAddAttack};
+export {randomNumber, generateEnemy, changeMessageStatus, switcherDisplay,isItNullOrUndefined, addMonsterInDeadZone,changeArrowDirection,removeOrAddAttack,getData};
