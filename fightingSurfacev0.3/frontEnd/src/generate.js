@@ -18,22 +18,6 @@ function randomEnemy(array){
     let rand = Math.floor(Math.random() * array.length);
     return array[rand];
 }
-/**
- * TODO: Fetch sur le backend pour récuperer l'ensemble des monstre et ainsis faire un tirage aléatoire dessus
- * 
- */
-async function getData(){
-  const response = await fetch("http://localhost/fightingSurfaceBack/monsters",{
-    method: 'GET',
-    mode: 'cors'
-  });
-  if(response.ok){
-    
-    return await Promise.resolve(response.json());
-  }else{
-    Promise.reject("Erreur");
-  }
-}
 
 
 /**
@@ -49,9 +33,9 @@ function generateEnemy(enemiesList){
     //1
     let randEnemy = randomEnemy(enemiesList);
 
-    console.log(randEnemy.name, randEnemy.life, randEnemy.att, randEnemy.def, randEnemy.url, randEnemy.score);
+    console.log(randEnemy.name, randEnemy.life, randEnemy.att, randEnemy.def, randEnemy.img, randEnemy.score);
     //2
-    let newEnemy = new Enemy(randEnemy.name, randEnemy.life, randEnemy.att, randEnemy.def, randEnemy.url, randEnemy.score);
+    let newEnemy = new Enemy(randEnemy.name, randEnemy.life, randEnemy.att, randEnemy.def, randEnemy.img, randEnemy.score);
     //3
     newEnemy.displayEnemy();
     return newEnemy;
@@ -180,4 +164,4 @@ function removeOrAddAttack(attackBtn, specialBtn, count, action = "") {
       specialBtn.classList.add("is-disabled");
     }
   }
-export {randomNumber, generateEnemy, changeMessageStatus, switcherDisplay,isItNullOrUndefined, addMonsterInDeadZone,changeArrowDirection,removeOrAddAttack,getData};
+export {randomNumber, generateEnemy, changeMessageStatus, switcherDisplay,isItNullOrUndefined, addMonsterInDeadZone,changeArrowDirection,removeOrAddAttack } 

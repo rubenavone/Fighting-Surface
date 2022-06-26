@@ -6,7 +6,7 @@ class Entity {
         this.life = life;
         this.att = att;
         this.def = def;
-        this.imgPath = imgPath;
+        this.imgPath =  imgPath;
         this.nameSelector = nameSelector;
         this.maxLife = this.life;
     }
@@ -81,7 +81,7 @@ class Entity {
 }
 
 class Enemy extends Entity {
-    constructor(name = "le clone", life = 80, att = 10, def = 2, imgPath = "img/barzork_clone.png", score, nameSelector) {
+    constructor(name = "le clone", life = 80, att = 10, def = 2, imgPath = "http://localhost/fighting_surface_V0.2/public/images/barzork_clone.png", score, nameSelector) {
         super(name, life, att, def, imgPath, nameSelector);
         this.lifeBar = document.querySelector("#enemy-bar");
         this.status = 0;

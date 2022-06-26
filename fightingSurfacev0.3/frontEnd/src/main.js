@@ -1,5 +1,6 @@
 import { Allies } from "./class.js";
 import {
+  // getData, //Import for static enemy list
   randomNumber,
   generateEnemy,
   changeMessageStatus,
@@ -8,12 +9,14 @@ import {
   switcherDisplay,
   changeArrowDirection,
   removeOrAddAttack,
-  getData
+ 
+  
 } from "./generate.js";
 //Données static
-import { enemiesList } from "./staticData/data.js";
+// import { enemiesList } from "./staticData/data.js";
 
 //Données dynamic
+import { getData } from "./dynamicData/data.js";
 
 //SELECTEUR
 //Menu
@@ -40,13 +43,30 @@ let howMuchAttack = 3;
 //Les entités
 let hero = null;
 let actualEnemy;
+var enemiesList = []
 //Score
 let score = 0;
+
+
+
+function fillEnemyArray(){
+    getData().then(function (data){
+      //Pour chaque objet on le pousse dans notre tableau
+        for (const key in data) {    
+                const element = data[key];
+                enemiesList.push(element)
+        }
+        waitingForEnemies(); //CallBack obligatoire
+    })
+    
+}
+
+fillEnemyArray();
+
 /**
  * ! SUITE
  * TODO: Crée un menu en HTML/CSS contenant Jouer - Scores - Crédit 
  */
-
 
 /**
  * TODO: Evenement pour gerer le bouton play du menu
@@ -131,15 +151,13 @@ specialBtnSelector.addEventListener("click", function () {
   }
 
 });
-async function bla(){
-  let data = await getData();
-  console.log(data)
-}
 
-newEnemy.addEventListener("click", function () {
- 
+function waitingForEnemies(){
+  newEnemy.addEventListener("click", function () {
+    console.log(enemiesList)
     //1
-bla()
+    actualEnemy = generateEnemy(enemiesList);
+
     //2
     newRound();
   
@@ -147,6 +165,8 @@ bla()
   generateButton.classList.toggle("disable");
 
 });
+}
+
 
 function beginTheGame() {
   //*Le bug ce trouve ici, il manquais un argument, le chemin vers l'image
@@ -171,7 +191,10 @@ function enemyAttack() {
       removeOrAddAttack(attackBtnSelector, specialBtnSelector, howMuchAttack, "add");
     } else if (actualEnemy.isDead() === true) {
       removeOrAddAttack(attackBtnSelector, specialBtnSelector, 0);
-      score += actualEnemy.score;
+      console.log(typeof actualEnemy.score)
+      console.log(actualEnemy.score)
+
+      score += parseInt(actualEnemy.score);
       hero.healByVictory();
       newRound();
     }
@@ -189,7 +212,10 @@ function enemyAttack() {
  * *
  */
 function newRound() {
-  addMonsterInDeadZone(actualEnemy);
+  if(score !== 0){
+    addMonsterInDeadZone(actualEnemy);
+
+  }
   actualEnemy = generateEnemy(enemiesList);
   removeOrAddAttack(attackBtnSelector, specialBtnSelector, 2);
   let rand = randomNumber();
@@ -207,6 +233,9 @@ function newRound() {
 
   }
 }
+
+
+
 
 /**
  * TODO: Fonction qui geère l'animation de la borne arcade
