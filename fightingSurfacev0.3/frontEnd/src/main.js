@@ -26,7 +26,9 @@ const menuCreditSelector = document.querySelector(".menu-credit-js");
 const menuReturn = document.querySelectorAll(".menu-return-js");
 //highscore 
 const highscoreSelector = document.querySelector(".highscore .nes-table-responsive tbody");
-const highscoreValidationSelector = document.querySelector(".highscore-input .nes-container .nes-field button");
+const highscoreValidationSelector = document.querySelector(".highscore-input .nes-container .nes-field .valid-score");
+const highscoreLeaveSelector = document.querySelector(".highscore-input .nes-container .nes-field .leave-score");
+
 const highscoreInputSelector = document.querySelector(".highscore-input .nes-container .nes-field input");
 const scoreAtEnd = document.querySelector(".score-at-end");
 //Bouton de generation d'ennemis et gestion apararition DOM enemy
@@ -108,7 +110,7 @@ menuHighscoreSelector.addEventListener("click", function () {
  * * 1 - Fait disparaitre le menu et apparaitre le crédit
  */
 menuCreditSelector.addEventListener("click", function () {
-  switcherDisplay(3);
+  switcherDisplay();
 });
 
 /**
