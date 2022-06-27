@@ -35,7 +35,7 @@ body {
     background-repeat: no-repeat, no-repeat;
     background-position: center,bottom;
     background-size: 140%;
-    
+    min-height: 99.5vh;
 }
 main {
     display: flex;
@@ -199,4 +199,17 @@ Framework modif
 
 .bigger{
     font-size: 30px;
+}
+.highscore-input{
+    align-self: center;
+    text-align: center;
+    text-shadow: 0 0 5px black;
+    position: absolute;
+    top: 9%;
+}
+.highscore-input input {
+    color: black;
+}
+.score-at-end{
+    font-size: 25px;
 }

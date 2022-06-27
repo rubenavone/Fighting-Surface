@@ -11,11 +11,12 @@
 </head>
 
 <body class="nes-pointer arcade-normal">
-
+    <!-- Conteneur pour les message "pos absolute" -->
     <article class="nes-container with-title is-centered is-dark">
         <p class="title">Status</p>
         <p class="status-bar">Bienvenue dans Fighting Surface</p>
     </article>
+    <!-- Interface menu -->
     <main class="menu">
 
         <button type="button" class="nes-btn is-warning menu-play-js">Jouer</button>
@@ -23,26 +24,29 @@
         <button type="button" class="nes-btn is-warning menu-credit-js ">Crédit </button>
 
     </main>
-
+    <!-- Crédit pour les artiste et créateur du jeux -->
     <main class="credit disable">
-    
+
         <div class="nes-table-responsive">
             <table class="nes-table is-bordered is-dark">
                 <thead>
                     <tr>
                         <th>Auteur</th>
                         <th>Asset</th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <a href="#"><td>James <span class="bigger">⎋</span> </td></a>
+                        <a href="#">
+                            <td>James <span class="bigger">⎋</span> </td>
+                        </a>
                         <td>le grincheux </td>
 
                     </tr>
                     <tr>
-                        <td><a rel="nofollow" href="https://www.duckduckgo.fr">Bill <span class="bigger">⎋</span></a> </td>
+                        <td><a rel="nofollow" href="https://www.duckduckgo.fr">Bill <span class="bigger">⎋</span></a>
+                        </td>
                         <td>le grincheux </td>
 
                     </tr>
@@ -52,6 +56,7 @@
         </div>
         <button type="button" class="nes-btn is-warning menu-return-js">Retour au menu</button>
     </main>
+    <!-- Tableau des scores -->
     <main class="highscore disable">
         <div class="nes-table-responsive">
             <table class="nes-table is-bordered is-dark">
@@ -59,7 +64,7 @@
                     <tr>
                         <th>Pseudo</th>
                         <th>Score</th>
-                     
+
                     </tr>
                 </thead>
                 <tbody>
@@ -71,13 +76,13 @@
         <button type="button" class="nes-btn is-warning menu-return-js">Retour au menu</button>
 
     </main>
+    <!-- LE JEUX -->
     <main class="game disable">
-
+        <!-- DEAD ZONE contenant les morts -->
         <article class="history">
-            <!-- <img src="img/barzork_bourrin.png" alt="" class="dead-enemy"> -->
 
         </article>
-
+        <!-- JOUEUR -->
         <section class="allies">
 
             <article class="action">
@@ -94,12 +99,17 @@
                 <progress class="nes-progress is-success" id="allies-bar" max="100" value="70"> 70% </progress>
             </article>
         </section>
-        <section class="turn-arrow">
+
+        <!-- ARROW -->
+        <section class="turn-arrow ">
             <img src="img/arrow.png" alt="">
         </section>
+
+        <!-- ENEMY -->
         <section class="enemy-full">
             <article>
-                <button type="button" class="nes-btn is-warning enemies-generator disable ">Genere un adversaire</button>
+                <button type="button" class="nes-btn is-warning enemies-generator disable ">Genere un
+                    adversaire</button>
             </article>
             <article class=" enemy disable ">
                 <h2 class="enemy-title"></h2>
@@ -113,6 +123,19 @@
             </article>
         </section>
     </main>
+    <section class="highscore-input disable">
+        <div class="nes-container with-title is-centered is-dark">
+
+            <p class="title">Votre score</p>
+            <p class="score-at-end"> </p>
+            <div class="nes-field">
+                <label for="name_field">Merci d'entrer votre pseudo</label>
+                <input type="text" id="name_field" class="nes-input">
+                <button type="button" class="nes-btn is-success">Envoie</button>
+            </div>
+        </div>
+
+    </section>
     <script type="module" src="main.js"></script>
 </body>
 

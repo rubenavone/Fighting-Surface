@@ -16,7 +16,7 @@ import {
 // import { enemiesList } from "./staticData/data.js";
 
 //Données dynamic
-import { getMonsters, getScores } from "./dynamicData/data.js";
+import { getMonsters, getScores, setScore } from "./dynamicData/data.js";
 
 //SELECTEUR
 //Menu
@@ -26,7 +26,9 @@ const menuCreditSelector = document.querySelector(".menu-credit-js");
 const menuReturn = document.querySelectorAll(".menu-return-js");
 //highscore 
 const highscoreSelector = document.querySelector(".highscore .nes-table-responsive tbody");
-
+const highscoreValidationSelector = document.querySelector(".highscore-input .nes-container .nes-field button");
+const highscoreInputSelector = document.querySelector(".highscore-input .nes-container .nes-field input");
+const scoreAtEnd = document.querySelector(".score-at-end");
 //Bouton de generation d'ennemis et gestion apararition DOM enemy
 const generateButton = document.querySelector(".enemies-generator");
 const enemyDisableSelector = document.querySelector(".enemy");
@@ -97,35 +99,8 @@ menuPlaySelector.addEventListener("click", function () {
  * * 3 - doit effacer les ancien score pour afficher les nouveaux (meme si il n'y en a pas)
  */
 menuHighscoreSelector.addEventListener("click", function () {
-  let allTr = document.querySelectorAll(".highscore .nes-table-responsive tbody tr");
-  
-  console.log(allTr);
-  if(allTr.length !== 0 ){
-    allTr.forEach(function(oneTr){
-      oneTr.remove();
-    })
-  }
-  
-  getScores().then(function (scores) {
-    for (const key in scores) {
-      const element = scores[key];
+  displayScore()
 
-      let tr = document.createElement("tr")
-      let tdName = document.createElement("td");
-      let tdScore = document.createElement("td");
-
-      tdName.textContent = element.name;
-      tdScore.textContent = element.score;
-
-      highscoreSelector.append(tr);
-      tr.append(tdName);
-      tr.append(tdScore);
-
-
-    }
-    switcherDisplay(2);
-  })
-  
 });
 
 /**
@@ -236,12 +211,12 @@ function enemyAttack() {
       newRound();
     }
     if (hero.isDead()) {
-      console.log(score);
       let history = document.querySelectorAll(".dead-enemy");
       removeOrAddAttack(attackBtnSelector, specialBtnSelector, 0);
       setTimeout(function () {
         enemyDisableSelector.classList.add("disable");
         lifeBarEnemySelector[1].classList.add("disable");
+
       }, 1400)
       history.forEach(function (enemy) {
         setTimeout(function () {
@@ -249,11 +224,42 @@ function enemyAttack() {
         }, 800)
       })
       animArcade("out");
+      setTimeout(function () {
+        scoreAtEnd.textContent = score;
+        switcherDisplay(3);
+
+      }, 1800)
     }
     canAttack = true;
   }, 2000);
 }
 
+/**
+ * TODO: BOUTON pour valider le score et l'envoyer
+ */
+highscoreValidationSelector.addEventListener("click", function () {
+  console.log("Vous voulez ajouter un score verif en cours");
+  if (highcoreInputIsOk()) {
+    let highscoreEntry = {};
+    highscoreEntry.name = highscoreInputSelector.value;
+    highscoreEntry.score = score;
+    console.log(highscoreEntry)
+    //On ajoute le score en bases de données
+    setScore(highscoreEntry)
+    //On affiche ensuite le tableau des scores
+    displayScore()
+
+  } else {
+
+  }
+})
+/**
+ * TODO: Fonction qui verifie l'input xss etc
+ */
+function highcoreInputIsOk(value) {
+
+  return true;
+}
 /**
  * TODO: fonction qui change la fleche de direction démarrage du jeux ou d'un round
  * *    Selon un nombre aléatoire définis qui commence
@@ -276,13 +282,9 @@ function newRound() {
   } else {
     changeMessageStatus("c'est l'ennemis qui commence");
     changeArrowDirection(arrowSelector);
-    enemyAttack();
-
+    enemyAttack()
   }
 }
-
-
-
 
 /**
  * TODO: Fonction qui geère l'animation de la borne arcade
@@ -290,7 +292,6 @@ function newRound() {
 function animArcade(inOrOut = "out") {
   if (inOrOut === "out") {
     setTimeout(function () {
-      switcherDisplay(0);
       beginTheGame();
       changeMessageStatus("Cliquez sur le bouton pour lancer le combat");
 
@@ -308,4 +309,39 @@ function animArcade(inOrOut = "out") {
     document.body.classList.add("arcade-zoom-in")
   }
 
+}
+
+function displayScore() {
+  let allTr = document.querySelectorAll(".highscore .nes-table-responsive tbody tr");
+
+  console.log(allTr);
+  if (allTr.length !== 0) {
+    allTr.forEach(function (oneTr) {
+      oneTr.remove();
+    })
+  }
+
+  getScores().then(function (scores) {
+    let count = 0;
+    for (const key in scores) {
+      if (count < 5) {
+        const element = scores[key];
+
+        let tr = document.createElement("tr")
+        let tdName = document.createElement("td");
+        let tdScore = document.createElement("td");
+
+        tdName.textContent = element.name;
+        tdScore.textContent = element.score;
+
+        highscoreSelector.append(tr);
+        tr.append(tdName);
+        tr.append(tdScore);
+
+        count++;
+      }
+    }
+
+    switcherDisplay(2);
+  })
 }
