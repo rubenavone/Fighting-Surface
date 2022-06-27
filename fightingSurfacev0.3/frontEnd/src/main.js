@@ -9,14 +9,14 @@ import {
   switcherDisplay,
   changeArrowDirection,
   removeOrAddAttack,
- 
-  
+
+
 } from "./generate.js";
 //Données static
 // import { enemiesList } from "./staticData/data.js";
 
 //Données dynamic
-import { getData } from "./dynamicData/data.js";
+import { getMonsters, getScores } from "./dynamicData/data.js";
 
 //SELECTEUR
 //Menu
@@ -24,10 +24,13 @@ const menuPlaySelector = document.querySelector(".menu-play-js");
 const menuHighscoreSelector = document.querySelector(".menu-highscore-js");
 const menuCreditSelector = document.querySelector(".menu-credit-js");
 const menuReturn = document.querySelectorAll(".menu-return-js");
+//highscore 
+const highscoreSelector = document.querySelector(".highscore .nes-table-responsive tbody");
+
 //Bouton de generation d'ennemis et gestion apararition DOM enemy
 const generateButton = document.querySelector(".enemies-generator");
 const enemyDisableSelector = document.querySelector(".enemy");
-const lifeBarEnemySelector = document.querySelector(".life-bar");
+const lifeBarEnemySelector = document.querySelectorAll(".life-bar");
 //Gestion des tours et de l'attaque
 const newEnemy = document.querySelector(".enemies-generator");
 const arrowSelector = document.querySelector(".turn-arrow > img");
@@ -42,25 +45,30 @@ let canAttack = true;
 let howMuchAttack = 3;
 //Les entités
 let hero = null;
-let actualEnemy;
+let actualEnemy = null;
 var enemiesList = []
 //Score
 let score = 0;
 
 
+/**
+ * TODO: Fonction qui fait un fetch pour récuperer les monstres
+ * * Elle foit contenir un callback vers la création du bouton de génération de monstre.
+ * * Pourquoi ? Fetch est une requete async si on ne fait pas ce callback le bouton est créée avant 
+ * * du coup on ce retrouve avec un tableau vide.
+ */
+function fillEnemyArray() {
+  getMonsters().then(function (data) {
+    //Pour chaque objet on le pousse dans notre tableau
+    for (const key in data) {
+      const element = data[key];
+      enemiesList.push(element)
+    }
+    waitingForEnemies(); //CallBack obligatoire
+  })
 
-function fillEnemyArray(){
-    getData().then(function (data){
-      //Pour chaque objet on le pousse dans notre tableau
-        for (const key in data) {    
-                const element = data[key];
-                enemiesList.push(element)
-        }
-        waitingForEnemies(); //CallBack obligatoire
-    })
-    
 }
-
+//Appel de la fonction dès le lancement de l'application
 fillEnemyArray();
 
 /**
@@ -74,20 +82,50 @@ fillEnemyArray();
  */
 menuPlaySelector.addEventListener("click", function () {
   animArcade("in");
-
+  actualEnemy = null;
   //Lancement du jeux
   beginTheGame();
   generateButton.classList.toggle("disable");
-  enemyDisableSelector.classList.toggle("disable");
-  lifeBarEnemySelector.classList.toggle("disable");
+  // enemyDisableSelector.classList.toggle("disable");
+  // lifeBarEnemySelector.classList.toggle("disable");
 });
 
 /**
  * TODO: Evenement pour gerer le bouton highscore du menu
  * * 1 - Fait disparaitre le menu et apparaitre le tableau
+ * * 2 - Permet de récuperer les score dans la bases de données
+ * * 3 - doit effacer les ancien score pour afficher les nouveaux (meme si il n'y en a pas)
  */
 menuHighscoreSelector.addEventListener("click", function () {
-  switcherDisplay(2);
+  let allTr = document.querySelectorAll(".highscore .nes-table-responsive tbody tr");
+  
+  console.log(allTr);
+  if(allTr.length !== 0 ){
+    allTr.forEach(function(oneTr){
+      oneTr.remove();
+    })
+  }
+  
+  getScores().then(function (scores) {
+    for (const key in scores) {
+      const element = scores[key];
+
+      let tr = document.createElement("tr")
+      let tdName = document.createElement("td");
+      let tdScore = document.createElement("td");
+
+      tdName.textContent = element.name;
+      tdScore.textContent = element.score;
+
+      highscoreSelector.append(tr);
+      tr.append(tdName);
+      tr.append(tdScore);
+
+
+    }
+    switcherDisplay(2);
+  })
+  
 });
 
 /**
@@ -152,32 +190,31 @@ specialBtnSelector.addEventListener("click", function () {
 
 });
 
-function waitingForEnemies(){
+function waitingForEnemies() {
   newEnemy.addEventListener("click", function () {
     console.log(enemiesList)
+    score = 0;
     //1
     actualEnemy = generateEnemy(enemiesList);
 
     //2
     newRound();
-  
-  //Retrait du bouton
-  generateButton.classList.toggle("disable");
 
-});
+    //Retrait du bouton
+    generateButton.classList.toggle("disable");
+
+  });
 }
 
 
 function beginTheGame() {
   //*Le bug ce trouve ici, il manquais un argument, le chemin vers l'image
   //*Le code pourrait être améliorer, il y a des soucis dans l'organisation selon moi
-  if (!isItNullOrUndefined(hero)) {
-    hero = new Allies("Jeanjean", 100, 60, 3, "");
-    hero.statusInit();
-  }
-  if (actualEnemy !== undefined) {
-    generateButton.classList.toggle("disable");
-  }
+
+  hero = new Allies("Jeanjean", 80, 60, 3, "");
+  hero.statusInit();
+
+
 }
 
 /**
@@ -200,7 +237,18 @@ function enemyAttack() {
     }
     if (hero.isDead()) {
       console.log(score);
-      animArcade();
+      let history = document.querySelectorAll(".dead-enemy");
+      removeOrAddAttack(attackBtnSelector, specialBtnSelector, 0);
+      setTimeout(function () {
+        enemyDisableSelector.classList.add("disable");
+        lifeBarEnemySelector[1].classList.add("disable");
+      }, 1400)
+      history.forEach(function (enemy) {
+        setTimeout(function () {
+          enemy.remove();
+        }, 800)
+      })
+      animArcade("out");
     }
     canAttack = true;
   }, 2000);
@@ -212,9 +260,8 @@ function enemyAttack() {
  * *
  */
 function newRound() {
-  if(score !== 0){
+  if (score !== 0) {
     addMonsterInDeadZone(actualEnemy);
-
   }
   actualEnemy = generateEnemy(enemiesList);
   removeOrAddAttack(attackBtnSelector, specialBtnSelector, 2);
@@ -247,7 +294,7 @@ function animArcade(inOrOut = "out") {
       beginTheGame();
       changeMessageStatus("Cliquez sur le bouton pour lancer le combat");
 
-    }, 500);
+    }, 1400);
     document.body.classList.add("arcade-zoom-out")
     document.body.classList.remove("arcade-zoom-in")
   } else {

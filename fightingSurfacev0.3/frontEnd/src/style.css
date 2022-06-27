@@ -8,7 +8,7 @@
     }
 
     100% {
-       background-size: 1400%, 100%;
+       background-size: 140%, 100%;
     }
 }
 @keyframes arcade-in {
@@ -31,9 +31,10 @@
 } */
 
 body {
-    background-image: url("img/arcade_background.png"), url("img/background_plaine.jpg") ;
-    background-repeat: no-repeat, repeat;
+    background-image: url("img/background_arcade.png"), url("img/background_plaine.jpg") ;
+    background-repeat: no-repeat, no-repeat;
     background-position: center,bottom;
+    background-size: 140%;
     
 }
 main {
@@ -152,6 +153,9 @@ article {
 .disable {
     display: none;
 }
+.enemy-full .life-bar {
+    justify-self: center;
+}
 /*
 history
 */
@@ -192,3 +196,7 @@ Framework modif
         background-size: contain;
     }
 } */
+
+.bigger{
+    font-size: 30px;
+}
