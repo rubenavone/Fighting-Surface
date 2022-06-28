@@ -7,7 +7,7 @@ class Model
 
     private function setDB()
     {
-        $this->pdo = new PDO("mysql:host=localhost;dbname=fighting_surface_v02;charset=utf8", "root", "Ruben34080");
+        $this->pdo = new PDO("mysql:host=localhost;dbname=fighting_surface_v02;charset=utf8", "root", "");
         // $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
 
