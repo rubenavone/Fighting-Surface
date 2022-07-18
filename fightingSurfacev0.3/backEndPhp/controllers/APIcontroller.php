@@ -248,7 +248,7 @@ class ApiController
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-resquested-With");
 
-        if ($_SERVER['REQUEST_METHOD'] === "PUT") {
+        if ($_SERVER['REQUEST_METHOD'] === "UPDATE") {
             
             $player = json_decode(file_get_contents("php://input"));
             $result = $this->apiManager->getPlayerNameDB($player->name);
@@ -269,7 +269,7 @@ class ApiController
             
         } else {
             http_response_code(405);
-            echo json_encode(["message" => "La méthode n'est pas autorisée"]);
+            echo json_encode(["message" => "La méthode n'est pas autorisée" . $_SERVER["REQUEST_METHOD"]]);
         }
     }
 }
