@@ -8,19 +8,15 @@ En typant fortement les noms dans nos table en SQL, nous suivront ainsi un peu m
 La mises en commentaire de la suppression des score est également nécéssaire tant que nous n'avons pas d'interface d'administration.
 Si il y a un quatrieme version alors, nous envisageront de remettre cette option.
 
-note perso:
-J'ai découvert que comme dans le langage bash il est possible d'utiliser comme opérateur de comparaison.
-&lt less than
-&gt greater than
-&le less than or equal
-&ge greate than or equal
+
 Front End:
 
 La mises en place d'un menu, qui contien Jouer, Score et Crédit.
 Nous allons pouvoir ainsi naviguer et mettre en place le reste de l'application.
-Il faut également faire de la refactorisation et cela va nous permettre d'aborder un des fondement de la programmation le débugage.
+Il faut également faire de la refactorisation et cela va nous permettre d'aborder un des fondement de la programmation le débogage.
 Pour faire du débug nous utiliseront la console de développement du navigateur.
 Ainsi cela ouvre un découverte sur les break point, cela permet également d'observer le fonctionement du programme et les étapes par lesquelles il passe.
+le mot clé debugger permet de mettre un breakpoints en dur dans le code.
 
 Jusqu'à présent nous avons travaillez sur un tableau à deux dimension pour générer les monstre (Démonstration du destructuring sur tableau).
 désormais nous transformeront celui-ci en tableau d'objet, ou JSON.

@@ -18,14 +18,8 @@ import {
 //Données dynamic
 import { getMonsters, getScores, setScore, updateScore } from "./dynamicData/data.js";
 
-//TEST PUT
 
-// updateScore({
-//   name: "ruben",
-//   score: 232
-// })
-
-updateScore().then(response=>response.json()).then(data=>console.log(data));
+// updateScore().then(response=>response.json()).then(data=>console.log(data));
 //SELECTEUR
 //Menu
 const menuPlaySelector = document.querySelector(".menu-play-js");
@@ -257,9 +251,13 @@ highscoreValidationSelector.addEventListener("click", function () {
     highscoreEntry.score = score;
     console.log(JSON.stringify(highscoreEntry));
     //On ajoute le score en bases de données
-    updateScore(highscoreEntry)
+    
+    updateScore(highscoreEntry).then((response)=>{
+    console.log(response);
     //On affiche ensuite le tableau des scores
     displayScore()
+    })
+
 
   } else {
 

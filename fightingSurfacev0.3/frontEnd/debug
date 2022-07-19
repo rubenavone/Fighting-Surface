@@ -1,0 +1,66 @@
+{
+	"En-têtes de la requête (512 o)": {
+		"headers": [
+			{
+				"name": "Accept",
+				"value": "*/*"
+			},
+			{
+				"name": "Accept-Encoding",
+				"value": "gzip, deflate, br"
+			},
+			{
+				"name": "Accept-Language",
+				"value": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3"
+			},
+			{
+				"name": "Connection",
+				"value": "keep-alive"
+			},
+			{
+				"name": "Content-Length",
+				"value": "55"
+			},
+			{
+				"name": "Content-type",
+				"value": "application/json; charset=UTF-8"
+			},
+			{
+				"name": "DNT",
+				"value": "1"
+			},
+			{
+				"name": "Host",
+				"value": "localhost"
+			},
+			{
+				"name": "Origin",
+				"value": "http://127.0.0.1:5500"
+			},
+			{
+				"name": "Referer",
+				"value": "http://127.0.0.1:5500/"
+			},
+			{
+				"name": "Sec-Fetch-Dest",
+				"value": "empty"
+			},
+			{
+				"name": "Sec-Fetch-Mode",
+				"value": "cors"
+			},
+			{
+				"name": "Sec-Fetch-Site",
+				"value": "cross-site"
+			},
+			{
+				"name": "Sec-GPC",
+				"value": "1"
+			},
+			{
+				"name": "User-Agent",
+				"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0"
+			}
+		]
+	}
+}

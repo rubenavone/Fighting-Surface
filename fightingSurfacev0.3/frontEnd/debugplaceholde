@@ -1,0 +1,102 @@
+{
+	"En-têtes de la réponse (1,063 Ko)": {
+		"headers": [
+			{
+				"name": "access-control-allow-credentials",
+				"value": "true"
+			},
+			{
+				"name": "access-control-allow-origin",
+				"value": "http://127.0.0.1:5500"
+			},
+			{
+				"name": "alt-svc",
+				"value": "h3=\":443\"; ma=86400, h3-29=\":443\"; ma=86400"
+			},
+			{
+				"name": "cache-control",
+				"value": "no-cache"
+			},
+			{
+				"name": "cf-cache-status",
+				"value": "DYNAMIC"
+			},
+			{
+				"name": "cf-ray",
+				"value": "72d1a1533e0c74a9-LHR"
+			},
+			{
+				"name": "content-encoding",
+				"value": "br"
+			},
+			{
+				"name": "content-type",
+				"value": "application/json; charset=utf-8"
+			},
+			{
+				"name": "date",
+				"value": "Tue, 19 Jul 2022 07:09:11 GMT"
+			},
+			{
+				"name": "etag",
+				"value": "W/\"3f-Z4yJeVFK+b94QunVdPorc7PTMlI\""
+			},
+			{
+				"name": "expect-ct",
+				"value": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\""
+			},
+			{
+				"name": "expires",
+				"value": "-1"
+			},
+			{
+				"name": "nel",
+				"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+			},
+			{
+				"name": "pragma",
+				"value": "no-cache"
+			},
+			{
+				"name": "report-to",
+				"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=pXaL3km0zmRLU207EljPbFidmXyGeI4SYAT1CfVG5GIUfG7fuOZSPWa5Q5zmnxx46QTttwxJkuWbf5LJFosh2z%2BS6gqtJTOryUHyn%2BojcKeik5aTbGSuSMGQdp7QR0wYGV1r5GiCZcuyA%2Bark8jH\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+			},
+			{
+				"name": "server",
+				"value": "cloudflare"
+			},
+			{
+				"name": "vary",
+				"value": "Origin, Accept-Encoding"
+			},
+			{
+				"name": "via",
+				"value": "1.1 vegur"
+			},
+			{
+				"name": "x-content-type-options",
+				"value": "nosniff"
+			},
+			{
+				"name": "X-Firefox-Spdy",
+				"value": "h2"
+			},
+			{
+				"name": "x-powered-by",
+				"value": "Express"
+			},
+			{
+				"name": "x-ratelimit-limit",
+				"value": "1000"
+			},
+			{
+				"name": "x-ratelimit-remaining",
+				"value": "996"
+			},
+			{
+				"name": "x-ratelimit-reset",
+				"value": "1658214553"
+			}
+		]
+	}
+}
