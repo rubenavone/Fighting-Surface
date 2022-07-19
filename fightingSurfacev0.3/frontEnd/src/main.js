@@ -16,8 +16,16 @@ import {
 // import { enemiesList } from "./staticData/data.js";
 
 //Données dynamic
-import { getMonsters, getScores, setScore } from "./dynamicData/data.js";
+import { getMonsters, getScores, setScore, updateScore } from "./dynamicData/data.js";
 
+//TEST PUT
+
+// updateScore({
+//   name: "ruben",
+//   score: 232
+// })
+
+updateScore().then(response=>response.json()).then(data=>console.log(data));
 //SELECTEUR
 //Menu
 const menuPlaySelector = document.querySelector(".menu-play-js");
@@ -247,9 +255,9 @@ highscoreValidationSelector.addEventListener("click", function () {
     let highscoreEntry = {};
     highscoreEntry.name = highscoreInputSelector.value;
     highscoreEntry.score = score;
-    console.log(highscoreEntry)
+    console.log(JSON.stringify(highscoreEntry));
     //On ajoute le score en bases de données
-    setScore(highscoreEntry)
+    updateScore(highscoreEntry)
     //On affiche ensuite le tableau des scores
     displayScore()
 
@@ -291,7 +299,7 @@ function newRound() {
 }
 
 /**
- * TODO: Fonction qui geère l'animation de la borne arcade
+ * TODO: Fonction qui gère l'animation de la borne arcade
  */
 function animArcade(inOrOut = "out") {
   if (inOrOut === "out") {
