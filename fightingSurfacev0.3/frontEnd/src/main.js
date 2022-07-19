@@ -183,12 +183,14 @@ function waitingForEnemies() {
   });
 }
 
-
+/**
+ * TODO: Begin the game permet de générer le heros au démarrage
+ */
 function beginTheGame() {
   //*Le bug ce trouve ici, il manquais un argument, le chemin vers l'image
   //*Le code pourrait être améliorer, il y a des soucis dans l'organisation selon moi
 
-  hero = new Allies("Jeanjean", 80, 60, 3, "");
+  hero = new Allies("Jeanjean", 140, 60, 3, "");
   hero.statusInit();
 
 
