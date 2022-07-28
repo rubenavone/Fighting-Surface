@@ -156,7 +156,9 @@ newEnemy.addEventListener("click", function () {
   }
 });
 
-
+/**
+ * TODO : Instanciation du héros, ICI démarre le JEUX 
+ */
 function beginTheGame() {
   //*Le bug ce trouve ici, il manquais un argument, le chemin vers l'image
   //*Le code pourrait être améliorer, il y a des soucis dans l'organisation selon moi

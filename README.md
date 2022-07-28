@@ -10,6 +10,4 @@ Installer tout les fichiers, dans backEnd php installez la bdd à partir du back
 Modifier le mot de passe de la base de données dans le pdo et eventuellement le nom du dossier ou ce trouve la base de données
 
 
-TODO BUG :
 
-Lors du lancement d'une nouvel partie, un monstre ce met dans l'historique. (régler le score n'etant pas égal a 0 il ajouter un adv)
