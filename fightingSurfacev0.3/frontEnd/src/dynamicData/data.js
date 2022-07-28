@@ -17,7 +17,6 @@ async function getMonsters() {
     mode: 'cors'
   });
   if (response.ok) {
-
     return await Promise.resolve(response.json());
   } else {
     Promise.reject("Erreur");
